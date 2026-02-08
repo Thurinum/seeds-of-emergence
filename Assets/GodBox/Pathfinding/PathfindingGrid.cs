@@ -79,6 +79,22 @@ namespace GodBox.Pathfinding
             return neighbours;
         }
 
+        public PathNode GetRandomWalkableNode(Vector3 center, float radius)
+        {
+            // Simple random sampling approach
+            for (int i = 0; i < 10; i++)
+            {
+                Vector2 randomPoint = Random.insideUnitCircle * radius;
+                Vector3 checkPos = center + new Vector3(randomPoint.x, randomPoint.y, 0);
+                PathNode node = NodeFromWorldPoint(checkPos);
+                if (node != null && node.Walkable)
+                {
+                    return node;
+                }
+            }
+            return null; // Failed to find one
+        }
+
         void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x, GridWorldSize.y, 1));

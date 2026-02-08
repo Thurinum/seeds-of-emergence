@@ -48,4 +48,19 @@ namespace GodBox.UtilityAI.Considerations
             return context.GetData<float>(Key);
         }
     }
+
+    [Serializable]
+    public class NoiseConsideration : Consideration
+    {
+        public float Frequency = 0.1f;
+        public float Offset = 0f;
+
+        public override float GetInput(UtilityAIComponent context)
+        {
+            // Use instance ID to ensure different agents have different patterns
+            float agentOffset = (context.GetInstanceID() % 100) / 100f * 100f; 
+            float t = Time.time * Frequency + agentOffset + Offset;
+            return Mathf.PerlinNoise(t, 0f);
+        }
+    }
 }
