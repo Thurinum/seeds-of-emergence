@@ -125,6 +125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GodBox.Pathfinding.PathfindingAgent
   Speed: 5
   ReachThreshold: 0.1
+  Status: 
+  TargetPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &-2928998437622559553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +141,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GodBox.BasicNeedsComponent
   MaxFood: 100
   _currentFood: 50
-  FoodDecayRate: 1
+  FoodDecayRate: 3
   MaxHealth: 100
   _currentHealth: 100

@@ -37,7 +37,12 @@ namespace GodBox.UtilityAI
             // If we have a target, check status
             if (target != null)
             {
-                float dist = Vector3.Distance(context.transform.position, target.transform.position);
+                // Use 2D distance for interaction check to avoid Z-axis issues
+                float dist = Vector2.Distance(
+                    new Vector2(context.transform.position.x, context.transform.position.y), 
+                    new Vector2(target.transform.position.x, target.transform.position.y)
+                );
+                
                 if (dist <= target.InteractionRange)
                 {
                     target.Interact(context.gameObject);
@@ -46,6 +51,11 @@ namespace GodBox.UtilityAI
                 }
                 else if (!mover.IsMoving)
                 {
+                     // Debug why we stopped
+                     if (dist < target.InteractionRange * 2) {
+                         Debug.LogWarning($"[{context.name}] Stopped near food but too far to eat. Dist: {dist:F2}, Range: {target.InteractionRange}. (DiffZ: {Mathf.Abs(context.transform.position.z - target.transform.position.z):F2})");
+                     }
+
                      // Recalculate if we stopped but haven't reached (e.g. pushed off path)
                      mover.SetDestination(target.transform.position);
                      
