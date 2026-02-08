@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7923999164739584189}
   - component: {fileID: 973235190802093120}
+  - component: {fileID: -3788158181262464708}
+  - component: {fileID: -2349503386097614994}
+  - component: {fileID: -2928998437622559553}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -81,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 3b47512177328e78a9aa4d62062194dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,3 +94,51 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &-3788158181262464708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4422120784028934057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7665f78606fb9b60a92ee5cdee052475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GodBox.UtilityAI.UtilityAIComponent
+  TickInterval: 0.5
+  AvailableActions:
+  - {fileID: 11400000, guid: 1c6bf4578e4bb3fc2989ccb85176705a, type: 2}
+  - {fileID: 11400000, guid: 7d719cffd73a8e7cd97067e34dd5d2cc, type: 2}
+  _currentAction: {fileID: 11400000, guid: 7d719cffd73a8e7cd97067e34dd5d2cc, type: 2}
+--- !u!114 &-2349503386097614994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4422120784028934057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a306dac037bb690f8edd7d48786adb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GodBox.Pathfinding.PathfindingAgent
+  Speed: 5
+  ReachThreshold: 0.1
+--- !u!114 &-2928998437622559553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4422120784028934057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9a2e82f55a4d7aa2115ddc65d5a704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GodBox.BasicNeedsComponent
+  MaxFood: 100
+  _currentFood: 50
+  FoodDecayRate: 1
+  MaxHealth: 100
+  _currentHealth: 100
