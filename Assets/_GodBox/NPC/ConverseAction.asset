@@ -17,6 +17,7 @@ MonoBehaviour:
   - rid: 8830554116593287237
   SearchRadius: 10
   TalkRange: 3
+  Cooldown: 15
   references:
     version: 2
     RefIds:

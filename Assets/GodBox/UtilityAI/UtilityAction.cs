@@ -10,7 +10,7 @@ namespace GodBox.UtilityAI
         [SerializeReference]
         public List<Consideration> Considerations = new List<Consideration>();
 
-        public float Evaluate(UtilityAIComponent context)
+        public virtual float Evaluate(UtilityAIComponent context)
         {
             if (Considerations == null || Considerations.Count == 0)
                 return 0f;

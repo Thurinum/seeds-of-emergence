@@ -6,7 +6,7 @@ namespace GodBox.Conversation
 {
     public class DialogueComponent : MonoBehaviour
     {
-        public TextMeshPro WorldText; // For world space (overhead)
+        public TMP_Text WorldText; // Supports both TextMeshPro and TextMeshProUGUI
         public float TypeSpeed = 0.05f;
         public float DisplayDuration = 3f;
 
@@ -14,13 +14,21 @@ namespace GodBox.Conversation
 
         public void Say(string text)
         {
+            // Debug.Log($"[DialogueComponent] Say called with: '{text}'");
             if (_typeRoutine != null) StopCoroutine(_typeRoutine);
             _typeRoutine = StartCoroutine(TypeWriter(text));
         }
 
         private IEnumerator TypeWriter(string text)
         {
-            if (WorldText) WorldText.text = "";
+            if (WorldText)
+            {
+                WorldText.text = "";
+            }
+            else
+            {
+                Debug.LogWarning($"[DialogueComponent] {name} tried to say '{text}' but WorldText is null!");
+            }
 
             for (int i = 0; i <= text.Length; i++)
             {

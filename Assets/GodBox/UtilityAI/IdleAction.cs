@@ -15,42 +15,55 @@ namespace GodBox.UtilityAI
              var mover = context.GetAgentComponent<PathfindingAgent>();
              if (mover == null) return;
 
-             // Use blackboard to store state: "IdleData_NextMoveTime", "IdleData_IsWaiting"
+             // Check if we are currently waiting
              float nextMoveTime = context.GetData<float>("IdleData_NextMoveTime");
-             
-             if (Time.time < nextMoveTime) {
-                 mover.Stop();
+             if (Time.time < nextMoveTime)
+             {
+                 return; // Just wait
+             }
+
+             // If we are moving, let the agent move
+             if (mover.IsMoving)
+             {
                  return;
              }
 
-             if (!mover.IsMoving)
-             {
-                // We reached destination or haven't started. Pick a new one?
-                // Or maybe we just arrived. If just arrived, set a pause time.
-                // Since this Execute runs every frame, "Not Moving" means we are standing still.
-                
-                // Let's assume if we are not moving, we need to pick a spot OR wait.
-                // Simple state machine via blackboard: 
-                // 1. If Status == Moving -> Do nothing (PathfindingAgent handles it)
-                // 2. If Status == Stopped -> Set Wait Timer.
-                
-                // However, PathfindingAgent.IsMoving is true while traversing. 
-                // So if !IsMoving, we are done.
+             // If we are NOT moving and wait time is passed, it means we just arrived (or first run).
+             // Set a new wait time?
+             // To avoid "Wait before move" logic blocking us, let's distinguishing "Waiting" from "Ready".
+             // Actually, if we just arrived, we want to wait NOW.
+             
+             // We need to know if we arrived *this frame* or if we have been waiting.
+             // Let's use a "State" flag. 0 = Ready, 1 = Moving, 2 = Waiting
+             int state = context.GetData<int>("IdleData_State");
 
-                // Pick random point
-                PathNode randomNode = PathfindingGrid.Instance.GetRandomWalkableNode(context.transform.position, WanderRadius);
-                if (randomNode != null)
-                {
-                    mover.SetDestination(randomNode.WorldPosition);
-                    // Set next pause to happen AFTER we arrive? 
-                    // No, set a timeout so we don't spam pathfinding if we get stuck, 
-                    // but also we need logic to pause AFTER arrival.
-                    
-                    // Actually, simpler:
-                    // If not moving, calculate random delay, THEN move.
-                    float pause = Random.Range(MinPauseTime, MaxPauseTime);
-                    context.SetData("IdleData_NextMoveTime", Time.time + pause);
-                }
+             if (state == 1) // Was Moving
+             {
+                 // We stopped moving, so we arrived.
+                 // Start waiting.
+                 float pause = Random.Range(MinPauseTime, MaxPauseTime);
+                 context.SetData("IdleData_NextMoveTime", Time.time + pause);
+                 context.SetData("IdleData_State", 2); // Waiting
+                 return;
+             }
+             else if (state == 2) // Was Waiting
+             {
+                 // Wait time passed (checked above), so we are Ready.
+                 context.SetData("IdleData_State", 0);
+             }
+
+             // State 0 (Ready): Pick a new point
+             PathNode randomNode = PathfindingGrid.Instance.GetRandomWalkableNode(context.transform.position, WanderRadius);
+             if (randomNode != null)
+             {
+                 mover.SetDestination(randomNode.WorldPosition);
+                 context.SetData("IdleData_State", 1); // Moving
+             }
+             else
+             {
+                 // Failed, wait briefly
+                 context.SetData("IdleData_NextMoveTime", Time.time + 1.0f);
+                 context.SetData("IdleData_State", 2);
              }
         }
     }
